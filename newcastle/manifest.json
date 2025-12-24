@@ -1,7 +1,7 @@
 {
   "name": "Share to Newcastle",
   "short_name": "Newcastle",
-  "start_url": "./",
+  "start_url": "/miniature-octo-garbanzo/newcastle/",
   "scope": "./",
   "display": "standalone",
   "icons": [

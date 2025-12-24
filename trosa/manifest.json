@@ -1,7 +1,7 @@
 {
   "name": "Share to Trosa",
   "short_name": "Trosa",
-  "start_url": "./",
+  "start_url": "/miniature-octo-garbanzo/trosa/",
   "scope": "./",
   "display": "standalone",
   "icons": [
