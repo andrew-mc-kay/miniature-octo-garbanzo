@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <title>Share to Trosa</title>
+</head>
+<body>
+    <div id="status">Initialising...</div>
+
+    <script>
+        navigator.serviceWorker.register('../sw.js', { scope: '../' });
+
+        async function getSecret() {
+            let secret = localStorage.getItem('family-secret');
+            if (!secret) {
+                secret = prompt("Please enter the family secret:");
+                if (secret) {
+                    localStorage.setItem('family-secret', secret);
+                }
+            }
+            return secret;
+        }
+
+        async function handleUpload() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.has('shared')) {
+                document.getElementById('status').innerText = 'Ready to receive photos.';
+                return;
+            }
+
+            const secret = await getSecret();
+            if (!secret) {
+                document.getElementById('status').innerText = 'Upload cancelled: Secret required.';
+                return;
+            }
+
+            document.getElementById('status').innerText = 'Uploading...';
+
+            try {
+                const cache = await caches.open('shared-photos');
+                const response = await cache.match('/shared-file');
+                if (!response) throw new Error('No file found in cache');
+                
+                const blob = await response.blob();
+
+                const uploadResponse = await fetch('https://jbvlww2fwewgw5b455oaddxz6m0gkvjg.lambda-url.eu-west-1.on.aws/', {
+                    method: 'POST',
+                    body: blob,
+                    headers: {
+                        'x-family-secret': secret,
+                        'x-folder-name': 'trosa',
+                        'Content-Type': blob.type
+                    }
+                });
+
+                if (uploadResponse.ok) {
+                    document.getElementById('status').innerText = 'Success! Photo uploaded.';
+                } else {
+                    document.getElementById('status').innerText = 'Upload failed. Check your secret.';
+                }
+            } catch (err) {
+                document.getElementById('status').innerText = 'Error: ' + err.message;
+            }
+        }
+
+        handleUpload();
+    </script>
+</body>
+</html>

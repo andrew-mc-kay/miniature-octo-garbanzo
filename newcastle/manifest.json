@@ -1,0 +1,18 @@
+{
+  "name": "Share to Newcastle",
+  "short_name": "Newcastle",
+  "start_url": "/miniature-octo-garbanzo/newcastle/",
+  "display": "standalone",
+  "icons": [{ "src": "../icon.png", "sizes": "512x512", "type": "image/png" }],
+  "share_target": {
+    "action": "/miniature-octo-garbanzo/newcastle/upload",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [{
+        "name": "photos",
+        "accept": ["image/*"]
+      }]
+    }
+  }
+}

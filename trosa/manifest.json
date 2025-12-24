@@ -1,0 +1,18 @@
+{
+  "name": "Share to Trosa",
+  "short_name": "Trosa",
+  "start_url": "/miniature-octo-garbanzo/trosa/",
+  "display": "standalone",
+  "icons": [{ "src": "../icon.png", "sizes": "512x512", "type": "image/png" }],
+  "share_target": {
+    "action": "/miniature-octo-garbanzo/trosa/upload",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [{
+        "name": "photos",
+        "accept": ["image/*"]
+      }]
+    }
+  }
+}
