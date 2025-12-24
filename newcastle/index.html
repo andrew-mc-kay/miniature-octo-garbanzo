@@ -59,7 +59,9 @@
                 if (uploadResponse.ok) {
                     document.getElementById('status').innerText = 'Success! Photo uploaded.';
                 } else {
-                    document.getElementById('status').innerText = 'Upload failed. Check your secret.';
+                    // Read the error message returned by your Lambda (e.g., "Unauthorized", "File too large")
+                    const errorText = await uploadResponse.text();
+                    document.getElementById('status').innerText = `Upload failed (${uploadResponse.status}): ${errorText}`;
                 }
             } catch (err) {
                 document.getElementById('status').innerText = 'Error: ' + err.message;
