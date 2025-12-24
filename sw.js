@@ -1,4 +1,4 @@
-const CACHE_NAME = 'family-share-v2';
+const CACHE_NAME = 'family-share-v3';
 const ASSETS = [
   '/miniature-octo-garbanzo/small_icon.png',
   '/miniature-octo-garbanzo/large_icon.png',
@@ -13,7 +13,6 @@ const ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // If any URL in the array 404s, addAll fails entirely.
       return cache.addAll(ASSETS);
     })
   );
@@ -22,6 +21,12 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
+  // 1. Skip interception for the Lambda URL
+  if (url.hostname.includes('lambda-url.eu-west-1.on.aws')) {
+    return; // Let the browser handle this request normally
+  }
+
+  // 2. Handle the Share Target POST
   if (event.request.method === 'POST' && url.pathname.endsWith('/upload')) {
     event.respondWith((async () => {
       const formData = await event.request.formData();
@@ -31,12 +36,13 @@ self.addEventListener('fetch', (event) => {
       await cache.put('/shared-file', new Response(file));
       
       const pathParts = url.pathname.split('/');
-      // Correctly identifying the subfolder from the path
       const folderName = pathParts[pathParts.length - 2]; 
 
       return Response.redirect(`/miniature-octo-garbanzo/${folderName}/?shared=true`, 303);
     })());
-  } else {
+  } 
+  // 3. Default Cache-then-Network strategy
+  else {
     event.respondWith(
       caches.match(event.request).then(response => response || fetch(event.request))
     );
