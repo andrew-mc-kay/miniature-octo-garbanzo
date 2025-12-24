@@ -1,12 +1,12 @@
 {
-  "name": "Share to Trosa",
+  "name": "Trosa Photo Share",
   "short_name": "Trosa",
   "start_url": "/miniature-octo-garbanzo/trosa/",
   "scope": "./",
   "display": "standalone",
   "icons": [
-    { "src": "../small_icon.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "../large_icon.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "./small_icon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./large_icon.png", "sizes": "512x512", "type": "image/png" }
   ],
   "share_target": {
     "action": "./upload", 

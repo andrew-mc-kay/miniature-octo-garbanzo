@@ -1,11 +1,14 @@
 const CACHE_NAME = 'family-share-v3';
 const ASSETS = [
-  '/miniature-octo-garbanzo/small_icon.png',
-  '/miniature-octo-garbanzo/large_icon.png',
   '/miniature-octo-garbanzo/newcastle/',
+  '/miniature-octo-garbanzo/newcastle/small_icon.png',
+  '/miniature-octo-garbanzo/newcastle/large_icon.png',
   '/miniature-octo-garbanzo/newcastle/index.html',
   '/miniature-octo-garbanzo/newcastle/manifest.json',
+  
   '/miniature-octo-garbanzo/trosa/',
+  '/miniature-octo-garbanzo/trosa/small_icon.png',
+  '/miniature-octo-garbanzo/trosa/large_icon.png',
   '/miniature-octo-garbanzo/trosa/index.html',
   '/miniature-octo-garbanzo/trosa/manifest.json'
 ];
