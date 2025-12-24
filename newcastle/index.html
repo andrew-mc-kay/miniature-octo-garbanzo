@@ -2,12 +2,15 @@
 <html lang="en-GB">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Share to Newcastle</title>
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div id="status">Initialising...</div>
 
     <script>
+        // Register the service worker at the root scope
         navigator.serviceWorker.register('../sw.js', { scope: '../' });
 
         async function getSecret() {
