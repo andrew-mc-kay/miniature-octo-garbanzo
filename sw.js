@@ -1,6 +1,7 @@
 const CACHE_NAME = 'family-share-v2';
 const ASSETS = [
-  '/miniature-octo-garbanzo/icon.png',
+  '/miniature-octo-garbanzo/small_icon.png',
+  '/miniature-octo-garbanzo/large_icon.png',
   '/miniature-octo-garbanzo/newcastle/',
   '/miniature-octo-garbanzo/newcastle/index.html',
   '/miniature-octo-garbanzo/newcastle/manifest.json',
