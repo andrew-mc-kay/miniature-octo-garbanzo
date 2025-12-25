@@ -10,8 +10,13 @@
     <div id="status">Initialising...</div>
 
     <script>
-        // Register the service worker at the root scope
+       // 1. Register and listen for the new SW taking control
         navigator.serviceWorker.register('../sw.js', { scope: '../' });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            // Reloads the page automatically when the new SW activates
+            window.location.reload();
+        });
 
         async function getSecret() {
             let secret = localStorage.getItem('family-secret');

@@ -1,11 +1,11 @@
-const CACHE_NAME = 'family-share-v3';
+const CACHE_NAME = 'family-share-v1.1';
 const ASSETS = [
   '/miniature-octo-garbanzo/newcastle/',
   '/miniature-octo-garbanzo/newcastle/small_icon.png',
   '/miniature-octo-garbanzo/newcastle/large_icon.png',
   '/miniature-octo-garbanzo/newcastle/index.html',
   '/miniature-octo-garbanzo/newcastle/manifest.json',
-  
+
   '/miniature-octo-garbanzo/trosa/',
   '/miniature-octo-garbanzo/trosa/small_icon.png',
   '/miniature-octo-garbanzo/trosa/large_icon.png',
@@ -44,10 +44,31 @@ self.addEventListener('fetch', (event) => {
       return Response.redirect(`/miniature-octo-garbanzo/${folderName}/?shared=true`, 303);
     })());
   } 
-  // 3. Default Cache-then-Network strategy
+  // 3. Network-First for HTML, Cache-First for others
   else {
     event.respondWith(
-      caches.match(event.request).then(response => response || fetch(event.request))
+      fetch(event.request).catch(() => caches.match(event.request))
     );
   }
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+});
+
+self.addEventListener('install', (event) => {
+  self.skipWaiting(); // Force update
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+  );
 });
