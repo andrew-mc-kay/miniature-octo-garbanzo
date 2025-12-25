@@ -42,10 +42,14 @@
             try {
                 const cache = await caches.open('shared-photos');
                 const response = await cache.match('/shared-file');
-                if (!response) throw new Error('No file found in cache');
+                
+                // FIX 1: If the file is gone, don't try to upload again
+                if (!response) {
+                    document.getElementById('status').innerText = 'Photo already processed.';
+                    return;
+                }
                 
                 const blob = await response.blob();
-
                 const uploadResponse = await fetch('https://jbvlww2fwewgw5b455oaddxz6m0gkvjg.lambda-url.eu-west-1.on.aws/', {
                     method: 'POST',
                     body: blob,
@@ -58,8 +62,15 @@
 
                 if (uploadResponse.ok) {
                     document.getElementById('status').innerText = 'Success! Photo uploaded.';
+                    
+                    // FIX 2: Delete the file from cache so it can't be re-uploaded
+                    await cache.delete('/shared-file');
+
+                    // FIX 3: Remove "?shared=true" from the URL bar without reloading the page
+                    const cleanUrl = window.location.pathname;
+                    window.history.replaceState({}, document.title, cleanUrl);
+
                 } else {
-                    // Read the error message returned by your Lambda (e.g., "Unauthorized", "File too large")
                     const errorText = await uploadResponse.text();
                     document.getElementById('status').innerText = `Upload failed (${uploadResponse.status}): ${errorText}`;
                 }
@@ -67,7 +78,7 @@
                 document.getElementById('status').innerText = 'Error: ' + err.message;
             }
         }
-
+        
         handleUpload();
     </script>
 </body>
